@@ -719,6 +719,22 @@
     
     // Ejecutar una vez al cargar la página
     updateNavbarStyles();
+
+    // ── Evento de Scroll (Ahora cierra el menú mobile automáticamente) ──
+    window.addEventListener('scroll', () => {
+      // SI EL MENÚ ESTÁ ABIERTO AL HACER SCROLL: Lo cerramos a la fuerza
+      if (mobileMenu && mobileMenu.classList.contains('open')) {
+        mobileMenu.classList.remove('open');
+        
+        // Volvemos a poner el icono de las 3 barritas
+        if (hamIcon) {
+          hamIcon.className = 'fa-solid fa-bars text-xl transition-colors duration-300';
+        }
+      }
+
+      // Después de chequear el menú, actualiza los estilos normales de colores y fondos
+      updateNavbarStyles();
+    });
   </script>
 </body>
 </html>
