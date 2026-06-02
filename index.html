@@ -125,7 +125,7 @@
   <!-- ═══════════════════════════════════════════
        NAVBAR
   ═══════════════════════════════════════════ -->
-  <nav id="navbar" class="fixed top-0 inset-x-0 z-50 bg-transparent">
+  <nav id="navbar" class="fixed top-0 inset-x-0 z-50 bg-transparent border-none">
     <div class="max-w-6xl mx-auto px-5 flex items-center justify-between h-16">
 
       <!-- Logo -->
@@ -154,13 +154,12 @@
       </a>
 
       <!-- Hamburger -->
-      <button id="hamburger" class="md:hidden text-white p-2" aria-label="Menú">
-        <i id="ham-icon" class="fa-solid fa-bars text-xl"></i>
+      <button id="hamburger" class="md:hidden text-white p-2 aria-label="Menú"">
+      <i id="ham-icon" class="fa-solid fa-bars text-xl transition-colors duration-300"></i>
       </button>
     </div>
 
-    <!-- Mobile Menu -->
-    <div id="mobile-menu" class="md:hidden bg-white/97 backdrop-blur-md border-t border-fog-mid">
+<div id="mobile-menu" class="md:hidden bg-white/97 backdrop-blur-md border-none">
       <ul class="flex flex-col px-5 py-4 gap-4 text-ocean font-medium">
         <li><a href="#inicio"    class="mobile-link block hover:text-teal transition-colors">Inicio</a></li>
         <li><a href="#servicios" class="mobile-link block hover:text-teal transition-colors">Servicios</a></li>
@@ -395,7 +394,7 @@
                     <div class="text-white/60 text-xs mt-1">Especialidades</div>
                   </div>
                   <div class="bg-white/10 rounded-xl p-4 text-center col-span-2">
-                    <div class="text-3xl font-bold text-teal-light">😊</div>
+                    <div class="text-3xl font-bold text-teal-light">😁</div>
                     <div class="text-white/60 text-xs mt-1">Miles de sonrisas transformadas</div>
                   </div>
                 </div>
@@ -611,85 +610,99 @@
   <!-- ═══════════════════════════════════════════
        JAVASCRIPT
   ═══════════════════════════════════════════ -->
-  <script>
-
-
-
-// agregado de Francisco
-    window.addEventListener('scroll', () => {
-  const navbar = document.getElementById('navbar');
-  const logoText = document.getElementById('logo-text'); // <--- Añade esta línea si no está
-
-  if (window.scrollY > 50) {
-    // CUANDO BAJAS: La barra se hace blanca
-    navbar.classList.add('bg-white', 'shadow-md');
-    navbar.classList.remove('bg-transparent');
-    
-    // CAMBIO PARA EL TEXTO: Se quita el blanco y se pone el color oscuro
-    logoText.classList.add('text-ocean-dark');
-    logoText.classList.remove('text-white');
-
-  } else {
-    // CUANDO ESTÁS ARRIBA: La barra vuelve a ser transparente
-    navbar.classList.add('bg-transparent');
-    navbar.classList.remove('bg-white', 'shadow-md');
-    
-    // CAMBIO PARA EL TEXTO: Vuelve a ser blanco para que contraste con el fondo
-    logoText.classList.add('text-white');
-    logoText.classList.remove('text-ocean-dark');
-  }
-});
-
-
-
-
-// ── Navbar scroll effect ──
+<script>
     const navbar = document.getElementById('navbar');
     const navLinks = navbar.querySelectorAll('.nav-link');
-
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 60) {
-        navbar.classList.add('scrolled');
-        navLinks.forEach(l => {
-          l.classList.remove('text-white');
-          l.classList.add('text-ocean');
-        });
-        document.getElementById('logo-text').classList.remove('text-ocean-dark');
-        document.getElementById('logo-text').classList.add('text-ocean');
-      } else {
-        navbar.classList.remove('scrolled');
-        navLinks.forEach(l => {
-          l.classList.add('text-white');
-          l.classList.remove('text-ocean');
-        });
-      }
-    });
-
-    // ── Mobile Menu ──
+    const logoText = document.getElementById('logo-text');
     const hamburger = document.getElementById('hamburger');
     const mobileMenu = document.getElementById('mobile-menu');
     const hamIcon = document.getElementById('ham-icon');
 
-    hamburger.addEventListener('click', () => {
-      mobileMenu.classList.toggle('open');
-      hamIcon.className = mobileMenu.classList.contains('open')
-        ? 'fa-solid fa-xmark text-xl'
-        : 'fa-solid fa-bars text-xl';
-    });
+    // ── Función para actualizar colores del menú y navbar dinámicamente ──
+    function updateNavbarStyles() {
+      const isScrolled = window.scrollY > 60;
+      const isMenuOpen = mobileMenu ? mobileMenu.classList.contains('open') : false;
 
+      // 1. Control del fondo de la Navbar (Ahora es blanca si bajas O si el menú está abierto)
+      if (isScrolled || isMenuOpen) {
+        navbar.classList.add('scrolled', 'bg-white', 'shadow-md');
+        navbar.classList.remove('bg-transparent', 'bg-ocean-dark');
+      } else {
+        // Solo es transparente si estás arriba DEL TODO y el menú está CERRADO
+        navbar.classList.add('bg-transparent');
+        navbar.classList.remove('bg-white', 'shadow-md', 'scrolled', 'bg-ocean-dark');
+      }
+
+      // 2. Control de los textos de la Navbar de escritorio (.nav-link)
+      navLinks.forEach(link => {
+        if (isScrolled) {
+          link.classList.remove('text-white');
+          link.classList.add('text-ocean');
+        } else {
+          link.classList.add('text-white');
+          link.classList.remove('text-ocean');
+        }
+      });
+
+      // 3. Control del color de "Dental" en el Logo (Oscuro si bajas O si el menú móvil está abierto)
+      if (logoText) {
+        if (isScrolled || isMenuOpen) {
+          logoText.classList.add('text-ocean-dark');
+          logoText.classList.remove('text-white');
+        } else {
+          logoText.classList.add('text-white');
+          logoText.classList.remove('text-ocean-dark');
+        }
+      }
+
+      // 4. Control del color del botón Hamburguesa (3 líneas o X)
+      if (hamIcon) {
+        if (isScrolled || isMenuOpen) {
+          // Si bajás o abrís el menú, el fondo es blanco, por ende el icono debe ser oscuro
+          hamIcon.classList.add('text-ocean-dark');
+          hamIcon.classList.remove('text-white');
+        } else {
+          // Si estás arriba quieto y cerrado, el icono es blanco sobre el fondo transparente de la web
+          hamIcon.classList.add('text-white');
+          hamIcon.classList.remove('text-ocean-dark');
+        }
+      }
+    }
+
+    // ── Evento de Scroll ──
+    window.addEventListener('scroll', updateNavbarStyles);
+
+    // ── Mobile Menu (Click Hamburguesa) ──
+    if (hamburger && mobileMenu) {
+      hamburger.addEventListener('click', () => {
+        mobileMenu.classList.toggle('open');
+        
+        // Cambia el icono entre las 3 líneas y la X
+        if (hamIcon) {
+          hamIcon.className = mobileMenu.classList.contains('open')
+            ? 'fa-solid fa-xmark text-xl transition-colors duration-300'
+            : 'fa-solid fa-bars text-xl transition-colors duration-300';
+        }
+        
+        // Re-evaluar los estilos de la navbar al abrir/cerrar
+        updateNavbarStyles();
+      });
+    }
+
+    // Cerrar menú al hacer click en un link de mobile
     document.querySelectorAll('.mobile-link').forEach(link => {
       link.addEventListener('click', () => {
-        mobileMenu.classList.remove('open');
-        hamIcon.className = 'fa-solid fa-bars text-xl';
+        if (mobileMenu) mobileMenu.classList.remove('open');
+        if (hamIcon) hamIcon.className = 'fa-solid fa-bars text-xl transition-colors duration-300';
+        updateNavbarStyles();
       });
     });
 
     // ── Scroll Reveal (IntersectionObserver) ──
     const revealEls = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry, i) => {
+      entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          // Stagger siblings in the same grid
           const siblings = entry.target.closest('.grid')
             ? Array.from(entry.target.closest('.grid').querySelectorAll('.reveal'))
             : [entry.target];
@@ -703,6 +716,9 @@
     }, { threshold: 0.12 });
 
     revealEls.forEach(el => observer.observe(el));
+    
+    // Ejecutar una vez al cargar la página
+    updateNavbarStyles();
   </script>
 </body>
 </html>
