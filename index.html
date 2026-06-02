@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>| Dental Pro |</title>
+  <link rel="icon" type="image/png" href="icono.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ocean:   { DEFAULT: '#0d3b5e', light: '#1a5276', dark: '#091f33' },
+            teal:    { DEFAULT: '#2a9d8f', light: '#3bbcad', dark: '#1d6f64' },
+            fog:     { DEFAULT: '#f0f4f8', mid: '#d9e4ee', deep: '#b8cfe0' },
+          },
+          fontFamily: {
+            sans:  ['DM Sans', 'sans-serif'],
+            hand:  ['Caveat', 'cursive'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    /* ── GLOBAL ── */
+    html { scroll-behavior: smooth; }
+    *, *::before, *::after { box-sizing: border-box; }
+
+    /* ── WAVE DIVIDER ── */
+    .wave-top {
+      position: absolute; top: -2px; left: 0; width: 100%; overflow: hidden; line-height: 0;
+    }
+    .wave-bottom {
+      position: absolute; bottom: -2px; left: 0; width: 100%; overflow: hidden; line-height: 0; transform: rotate(180deg);
+    }
+    .wave-top svg, .wave-bottom svg { display: block; width: calc(100% + 1.3px); height: 60px; }
+
+    /* ── NAVBAR ── */
+    #navbar {
+      transition: background .35s, box-shadow .35s;
+    }
+    #navbar.scrolled {
+      background: rgba(255,255,255,.97);
+      box-shadow: 0 4px 24px rgba(13,59,94,.10);
+    }
+
+    /* ── HERO BACKGROUND MESH ── */
+    .hero-mesh {
+      background-color: #0d3b5e;
+      background-image:
+        radial-gradient(ellipse at 70% 30%, rgba(42,157,143,.45) 0%, transparent 60%),
+        radial-gradient(ellipse at 20% 80%, rgba(59,188,173,.25) 0%, transparent 55%),
+        radial-gradient(ellipse at 90% 80%, rgba(9,31,51,.6) 0%, transparent 50%);
+    }
+
+    /* ── FLOATING TOOTH ── */
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(-4deg); }
+      50%       { transform: translateY(-14px) rotate(4deg); }
+    }
+    .tooth-float { animation: float 5s ease-in-out infinite; }
+
+    /* ── CARD HOVER ── */
+    .service-card {
+      transition: transform .3s, box-shadow .3s;
+    }
+    .service-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(13,59,94,.14);
+    }
+
+    /* ── CTA BUTTON PULSE ── */
+    @keyframes pulse-ring {
+      0%   { box-shadow: 0 0 0 0 rgba(37,211,102,.5); }
+      70%  { box-shadow: 0 0 0 14px rgba(37,211,102,0); }
+      100% { box-shadow: 0 0 0 0 rgba(37,211,102,0); }
+    }
+    .btn-wa { animation: pulse-ring 2.2s infinite; }
+
+    /* ── STAGGER REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── CONTACT CARD ── */
+    .contact-card {
+      transition: transform .3s, box-shadow .3s;
+    }
+    .contact-card:hover { transform: translateY(-5px) scale(1.02); }
+
+    /* ── MOBILE NAV ── */
+    #mobile-menu { max-height: 0; overflow: hidden; transition: max-height .4s ease; }
+    #mobile-menu.open { max-height: 400px; }
+
+    /* ── GRADIENT TEXT ── */
+    .gradient-text {
+      background: linear-gradient(135deg, #2a9d8f 0%, #3bbcad 50%, #0d3b5e 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ── INSTAGRAM BUTTON ── */
+    .btn-ig {
+      background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    }
+  </style>
+</head>
+
+<body class="font-sans text-ocean bg-white antialiased">
+
+  <!-- ═══════════════════════════════════════════
+       NAVBAR
+  ═══════════════════════════════════════════ -->
+  <nav id="navbar" class="fixed top-0 inset-x-0 z-50 bg-transparent">
+    <div class="max-w-6xl mx-auto px-5 flex items-center justify-between h-16">
+
+      <!-- Logo -->
+      <a href="#inicio" class="flex items-center gap-2 group">
+        <div class="w-9 h-9 rounded-full bg-teal flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
+          <i class="fa-solid fa-tooth text-white text-sm"></i>
+        </div>
+        <span class="text-lg font-bold tracking-tight">
+          <span class="text-white" id="logo-text">Dental</span> <!-- Cambiado a blanco -->
+          <span class="text-teal"> Pro</span>
+        </span>
+      </a>
+
+      <!-- Desktop Links -->
+      <ul class="hidden md:flex items-center gap-8 text-sm font-medium">
+        <li><a href="#inicio"   class="nav-link text-white hover:text-teal-light transition-colors">Inicio</a></li>
+        <li><a href="#servicios" class="nav-link text-white hover:text-teal-light transition-colors">Servicios</a></li>
+        <li><a href="#nosotros"  class="nav-link text-white hover:text-teal-light transition-colors">Nosotros</a></li>
+        <li><a href="#contacto"  class="nav-link text-white hover:text-teal-light transition-colors">Contacto</a></li>
+      </ul>
+
+      <!-- CTA Agendar -->
+      <a href="https://wa.me/5493541317717?text=¡Hola!%20Vengo%20de%20la%20página%20web%20y%20quiero%20agendar%20un%20turno" target="_blank"
+         class="hidden md:inline-flex items-center gap-2 bg-teal hover:bg-teal-dark text-white text-sm font-semibold px-5 py-2.5 rounded-full transition-all shadow-lg hover:shadow-teal/40 hover:-translate-y-0.5">
+        <i class="fa-brands fa-whatsapp"></i> Agendar Turno
+      </a>
+
+      <!-- Hamburger -->
+      <button id="hamburger" class="md:hidden text-white p-2" aria-label="Menú">
+        <i id="ham-icon" class="fa-solid fa-bars text-xl"></i>
+      </button>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="md:hidden bg-white/97 backdrop-blur-md border-t border-fog-mid">
+      <ul class="flex flex-col px-5 py-4 gap-4 text-ocean font-medium">
+        <li><a href="#inicio"    class="mobile-link block hover:text-teal transition-colors">Inicio</a></li>
+        <li><a href="#servicios" class="mobile-link block hover:text-teal transition-colors">Servicios</a></li>
+        <li><a href="#nosotros"  class="mobile-link block hover:text-teal transition-colors">Nosotros</a></li>
+        <li><a href="#contacto"  class="mobile-link block hover:text-teal transition-colors">Contacto</a></li>
+        <li>
+          <a href="https://wa.me/5493541317717?text=¡Hola!%20Vengo%20de%20la%20página%20web%20y%20quiero%20agendar%20un%20turno" target="_blank"
+             class="flex items-center justify-center gap-2 bg-teal text-white font-semibold py-3 rounded-full text-sm">
+            <i class="fa-brands fa-whatsapp"></i> Agendar Turno
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+
+  <!-- ═══════════════════════════════════════════
+       HERO
+  ═══════════════════════════════════════════ -->
+  <section id="inicio" class="hero-mesh relative min-h-screen flex items-center overflow-hidden pt-16">
+
+    <!-- Decorative circles -->
+    <div class="absolute -top-20 -right-20 w-80 h-80 rounded-full bg-teal/10 blur-3xl pointer-events-none"></div>
+    <div class="absolute bottom-10 -left-20 w-72 h-72 rounded-full bg-ocean-light/20 blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-6xl mx-auto px-5 py-24 md:py-32 grid md:grid-cols-2 gap-12 items-center w-full">
+
+      <!-- Text -->
+      <div class="text-white space-y-6 z-10">
+        <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-teal-light text-sm font-medium px-4 py-1.5 rounded-full border border-teal/30">
+          <i class="fa-solid fa-location-dot text-xs"></i> Villa Carlos Paz, Córdoba
+        </div>
+
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+          Tu mejor
+          <span class="font-hand text-teal-light text-5xl md:text-6xl lg:text-7xl block leading-snug">sonrisa</span>
+          empieza aquí.
+        </h1>
+
+        <p class="font-hand text-2xl md:text-3xl text-teal-light">dibujando SONRISAS!</p>
+
+        <p class="text-white/75 text-base md:text-lg leading-relaxed max-w-md">
+          Clínica odontológica integral en Villa Carlos Paz. Cuidamos tu salud bucal con tecnología moderna, calidez humana y una amplia variedad de tratamientos para toda la familia.
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-4 pt-2">
+          <a href="https://wa.me/5493541317717?text=¡Hola!%20Vengo%20de%20la%20página%20web%20y%20quiero%20hacer%20una%20consulta"
+             target="_blank"
+             class="btn-wa inline-flex items-center justify-center gap-3 bg-[#25d366] hover:bg-[#1ebe5a] text-white font-bold px-8 py-4 rounded-full text-base transition-all shadow-xl">
+            <i class="fa-brands fa-whatsapp text-xl"></i> Consultá por WhatsApp
+          </a>
+          <a href="#servicios"
+             class="inline-flex items-center justify-center gap-2 border-2 border-white/40 hover:border-teal-light text-white hover:text-teal-light font-semibold px-7 py-4 rounded-full text-base transition-all">
+            Ver servicios <i class="fa-solid fa-arrow-down text-sm"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Tooth Illustration -->
+      <div class="hidden md:flex justify-center items-center z-10">
+        <div class="tooth-float relative">
+          <!-- Outer glow ring -->
+          <div class="absolute inset-0 rounded-full bg-teal/20 blur-2xl scale-110"></div>
+
+          <!-- Big tooth SVG -->
+          <svg viewBox="0 0 220 260" xmlns="http://www.w3.org/2000/svg" class="w-56 lg:w-72 drop-shadow-2xl">
+            <defs>
+              <linearGradient id="toothGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%"   stop-color="#ffffff"/>
+                <stop offset="100%" stop-color="#d9e4ee"/>
+              </linearGradient>
+              <linearGradient id="rootGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%"   stop-color="#3bbcad"/>
+                <stop offset="100%" stop-color="#1d6f64"/>
+              </linearGradient>
+            </defs>
+            <!-- Crown -->
+            <path d="M30 90 C10 60 10 20 50 15 C70 12 85 28 110 25 C135 22 150 12 170 15 C210 20 210 60 190 90
+                     C175 115 165 140 155 175 C148 198 140 215 125 215 C110 215 108 195 110 175
+                     C112 155 108 140 110 175 C112 195 110 215 95 215 C80 215 72 198 65 175
+                     C55 140 45 115 30 90 Z"
+                  fill="url(#toothGrad)" stroke="#b8cfe0" stroke-width="1.5"/>
+            <!-- Shine -->
+            <ellipse cx="82" cy="55" rx="14" ry="22" fill="white" opacity=".35" transform="rotate(-15 82 55)"/>
+            <!-- Root hints -->
+            <path d="M95 215 C92 235 90 255 88 255" stroke="url(#rootGrad)" stroke-width="9" stroke-linecap="round" fill="none"/>
+            <path d="M110 215 C110 235 110 250 110 252" stroke="url(#rootGrad)" stroke-width="9" stroke-linecap="round" fill="none"/>
+            <path d="M125 215 C128 235 130 255 132 255" stroke="url(#rootGrad)" stroke-width="9" stroke-linecap="round" fill="none"/>
+          </svg>
+
+          <!-- Floating badge -->
+          <div class="absolute -top-4 -right-4 bg-teal text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
+            ¡Turnos Disponibles!
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wave bottom -->
+    <div class="wave-bottom">
+      <svg viewBox="0 0 1200 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,0 C300,60 900,60 1200,0 L1200,60 L0,60 Z" fill="#ffffff"/>
+      </svg>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       SERVICIOS
+  ═══════════════════════════════════════════ -->
+  <section id="servicios" class="relative bg-white py-24 overflow-hidden">
+    <div class="max-w-6xl mx-auto px-5">
+
+      <!-- Heading -->
+      <div class="text-center mb-16 reveal">
+        <span class="text-teal text-sm font-semibold tracking-widest uppercase">Lo que hacemos</span>
+        <h2 class="mt-2 text-3xl md:text-4xl font-bold text-ocean">
+          Nuestros <span class="gradient-text">Servicios</span>
+        </h2>
+        <p class="mt-4 text-ocean/60 max-w-xl mx-auto text-base">
+          Contamos con un equipo especializado para atender todas tus necesidades odontológicas bajo un mismo techo.
+        </p>
+      </div>
+
+      <!-- Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- Card template repeat -->
+        <div class="service-card reveal bg-white rounded-2xl p-7 border border-fog-mid shadow-sm hover:border-teal/30 group">
+          <div class="w-12 h-12 rounded-xl bg-teal/10 flex items-center justify-center mb-5 group-hover:bg-teal group-hover:scale-110 transition-all">
+            <i class="fa-solid fa-teeth text-teal group-hover:text-white text-xl transition-colors"></i>
+          </div>
+          <h3 class="text-ocean font-bold text-lg mb-2">Ortodoncia</h3>
+          <p class="text-ocean/55 text-sm leading-relaxed">Corrección de la alineación dental y mordida mediante brackets, alineadores y aparatología moderna.</p>
+        </div>
+
+        <div class="service-card reveal bg-white rounded-2xl p-7 border border-fog-mid shadow-sm hover:border-teal/30 group">
+          <div class="w-12 h-12 rounded-xl bg-teal/10 flex items-center justify-center mb-5 group-hover:bg-teal group-hover:scale-110 transition-all">
+            <i class="fa-solid fa-tooth text-teal group-hover:text-white text-xl transition-colors"></i>
+          </div>
+          <h3 class="text-ocean font-bold text-lg mb-2">Odontología General</h3>
+          <p class="text-ocean/55 text-sm leading-relaxed">Limpiezas profesionales, controles anuales, tratamiento de caries y prevención integral para toda la familia.</p>
+        </div>
+
+        <div class="service-card reveal bg-white rounded-2xl p-7 border border-fog-mid shadow-sm hover:border-teal/30 group">
+          <div class="w-12 h-12 rounded-xl bg-teal/10 flex items-center justify-center mb-5 group-hover:bg-teal group-hover:scale-110 transition-all">
+            <i class="fa-solid fa-child-reaching text-teal group-hover:text-white text-xl transition-colors"></i>
+          </div>
+          <h3 class="text-ocean font-bold text-lg mb-2">Odontopediatría</h3>
+          <p class="text-ocean/55 text-sm leading-relaxed">Atención especializada y amigable para los más pequeños, cuidando sus primeros dientes con ternura.</p>
+        </div>
+
+        <div class="service-card reveal bg-white rounded-2xl p-7 border border-fog-mid shadow-sm hover:border-teal/30 group">
+          <div class="w-12 h-12 rounded-xl bg-teal/10 flex items-center justify-center mb-5 group-hover:bg-teal group-hover:scale-110 transition-all">
+            <i class="fa-solid fa-teeth-open text-teal group-hover:text-white text-xl transition-colors"></i>
+          </div>
+          <h3 class="text-ocean font-bold text-lg mb-2">Prótesis</h3>
+          <p class="text-ocean/55 text-sm leading-relaxed">Reemplazo estético y funcional de piezas dentales perdidas mediante prótesis fijas, removibles o combinadas.</p>
+        </div>
+
+        <div class="service-card reveal bg-white rounded-2xl p-7 border border-fog-mid shadow-sm hover:border-teal/30 group">
+          <div class="w-12 h-12 rounded-xl bg-teal/10 flex items-center justify-center mb-5 group-hover:bg-teal group-hover:scale-110 transition-all">
+            <i class="fa-solid fa-syringe text-teal group-hover:text-white text-xl transition-colors"></i>
+          </div>
+          <h3 class="text-ocean font-bold text-lg mb-2">Implantes</h3>
+          <p class="text-ocean/55 text-sm leading-relaxed">Sustitución de la raíz dental mediante tornillos de titanio de alta tecnología para una sonrisa duradera y natural.</p>
+        </div>
+
+        <div class="service-card reveal bg-white rounded-2xl p-7 border border-fog-mid shadow-sm hover:border-teal/30 group">
+          <div class="w-12 h-12 rounded-xl bg-teal/10 flex items-center justify-center mb-5 group-hover:bg-teal group-hover:scale-110 transition-all">
+            <i class="fa-solid fa-heart-pulse text-teal group-hover:text-white text-xl transition-colors"></i>
+          </div>
+          <h3 class="text-ocean font-bold text-lg mb-2">Rehabilitación Oral</h3>
+          <p class="text-ocean/55 text-sm leading-relaxed">Tratamiento integral para recuperar la función masticatoria y la estética dental en casos complejos.</p>
+        </div>
+
+        <!-- Cirugías - centrado en mobile, en la fila del grid en desktop -->
+        <div class="service-card reveal bg-white rounded-2xl p-7 border border-fog-mid shadow-sm hover:border-teal/30 group sm:col-span-2 lg:col-span-1">
+          <div class="w-12 h-12 rounded-xl bg-teal/10 flex items-center justify-center mb-5 group-hover:bg-teal group-hover:scale-110 transition-all">
+            <i class="fa-solid fa-mask-face text-teal group-hover:text-white text-xl transition-colors"></i> <!-- Cambio de logo -->
+          </div>
+          <h3 class="text-ocean font-bold text-lg mb-2">Cirugías</h3>
+          <p class="text-ocean/55 text-sm leading-relaxed">Extracciones, cirugías de terceros molares y pequeñas intervenciones con anestesia local y máximo confort.</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Decorative blob -->
+    <div class="absolute -right-24 top-1/2 -translate-y-1/2 w-96 h-96 bg-teal/5 rounded-full blur-3xl pointer-events-none"></div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       SOBRE NOSOTROS
+  ═══════════════════════════════════════════ -->
+  <section id="nosotros" class="relative bg-fog py-24 overflow-hidden">
+
+    <!-- Wave top -->
+    <div class="wave-top">
+      <svg viewBox="0 0 1200 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,60 C300,0 900,0 1200,60 L1200,0 L0,0 Z" fill="#ffffff"/>
+      </svg>
+    </div>
+
+    <div class="max-w-5xl mx-auto px-5 pt-8">
+      <div class="grid md:grid-cols-2 gap-16 items-center">
+
+        <!-- Visual -->
+        <div class="reveal order-2 md:order-1">
+          <div class="relative">
+            <!-- Decorative card stack -->
+            <div class="absolute top-4 left-4 w-full h-full rounded-3xl bg-teal/20 -rotate-3"></div>
+            <div class="relative bg-ocean rounded-3xl p-10 text-white overflow-hidden shadow-2xl">
+              <!-- Pattern dots -->
+              <div class="absolute -top-8 -right-8 w-32 h-32 rounded-full border-8 border-white/10"></div>
+              <div class="absolute -bottom-8 -left-8 w-32 h-32 rounded-full border-8 border-teal/20"></div>
+
+              <div class="relative z-10 space-y-6">
+                <p class="font-hand text-4xl text-teal-light leading-tight">queremos verte</p>
+                <p class="font-hand text-6xl font-bold text-white leading-none">SONREIR</p>
+
+                <div class="w-16 h-1 bg-teal rounded-full"></div>
+
+                <div class="grid grid-cols-2 gap-4 mt-4">
+                  <div class="bg-white/10 rounded-xl p-4 text-center">
+                    <div class="text-3xl font-bold text-teal-light">+10</div>
+                    <div class="text-white/60 text-xs mt-1">Años de experiencia</div>
+                  </div>
+                  <div class="bg-white/10 rounded-xl p-4 text-center">
+                    <div class="text-3xl font-bold text-teal-light">7</div>
+                    <div class="text-white/60 text-xs mt-1">Especialidades</div>
+                  </div>
+                  <div class="bg-white/10 rounded-xl p-4 text-center col-span-2">
+                    <div class="text-3xl font-bold text-teal-light">😊</div>
+                    <div class="text-white/60 text-xs mt-1">Miles de sonrisas transformadas</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Text -->
+        <div class="reveal order-1 md:order-2 space-y-6">
+          <span class="text-teal text-sm font-semibold tracking-widest uppercase">Quiénes somos</span>
+          <h2 class="text-3xl md:text-4xl font-bold text-ocean leading-snug">
+            Un equipo comprometido con tu salud bucal
+          </h2>
+          <p class="text-ocean/65 leading-relaxed">
+            En Dental Pro creemos que cada sonrisa cuenta una historia única. Por eso trabajamos con dedicación, tecnología de última generación y un trato cercano que hace que cada visita sea una experiencia tranquila y positiva.
+          </p>
+          <p class="text-ocean/65 leading-relaxed">
+            Nuestro equipo de profesionales especializados está comprometido con brindar la mejor atención odontológica en Villa Carlos Paz, desde los controles preventivos hasta los tratamientos más complejos.
+          </p>
+
+          <!-- Pills -->
+          <div class="flex flex-wrap gap-3 pt-2">
+            <span class="flex items-center gap-2 bg-teal/10 text-teal text-sm font-medium px-4 py-2 rounded-full">
+              <i class="fa-solid fa-check text-xs"></i> Atención personalizada
+            </span>
+            <span class="flex items-center gap-2 bg-teal/10 text-teal text-sm font-medium px-4 py-2 rounded-full">
+              <i class="fa-solid fa-check text-xs"></i> Tecnología moderna
+            </span>
+            <span class="flex items-center gap-2 bg-teal/10 text-teal text-sm font-medium px-4 py-2 rounded-full">
+              <i class="fa-solid fa-check text-xs"></i> Todas las edades
+            </span>
+            <span class="flex items-center gap-2 bg-teal/10 text-teal text-sm font-medium px-4 py-2 rounded-full">
+              <i class="fa-solid fa-check text-xs"></i> Financiación disponible
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wave bottom -->
+    <div class="wave-bottom">
+      <svg viewBox="0 0 1200 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,0 C300,60 900,60 1200,0 L1200,60 L0,60 Z" fill="#ffffff"/>
+      </svg>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       CONTACTO
+  ═══════════════════════════════════════════ -->
+  <section id="contacto" class="relative bg-white py-24 overflow-hidden">
+    <div class="max-w-4xl mx-auto px-5 text-center">
+
+      <div class="reveal">
+        <span class="text-teal text-sm font-semibold tracking-widest uppercase">Escribinos hoy</span>
+        <h2 class="mt-2 text-3xl md:text-4xl font-bold text-ocean">
+          Agendá tu <span class="gradient-text">turno ahora</span>
+        </h2>
+        <p class="mt-4 text-ocean/60 max-w-lg mx-auto">
+          Estamos a un mensaje de distancia. Contactanos por WhatsApp o seguinos en Instagram para más info.
+        </p>
+      </div>
+
+      <!-- Contact Cards -->
+      <div class="mt-14 grid sm:grid-cols-2 gap-6 reveal">
+
+        <!-- WhatsApp -->
+        <a href="https://wa.me/5493541317717?text=¡Hola!%20Vengo%20de%20la%20página%20web%20y%20quiero%20hacer%20una%20consulta"
+           target="_blank"
+           class="contact-card group flex flex-col items-center justify-center gap-5 bg-[#075e54] text-white rounded-3xl p-10 shadow-xl hover:shadow-2xl hover:shadow-[#25d366]/30">
+          <div class="w-20 h-20 rounded-2xl bg-white/15 flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-transform shadow-inner">
+            <i class="fa-brands fa-whatsapp text-5xl text-[#25d366]"></i>
+          </div>
+          <div>
+            <div class="text-xl font-bold mb-1">WhatsApp</div>
+            <div class="text-white/70 text-sm">+54 9 3541 317717</div>
+            <div class="mt-4 inline-flex items-center gap-2 bg-[#25d366] text-[#075e54] font-bold text-sm px-5 py-2.5 rounded-full hover:bg-[#1ebe5a] transition-colors">
+              <i class="fa-solid fa-message text-xs"></i> Enviar mensaje
+            </div>
+          </div>
+        </a>
+
+        <!-- Instagram -->
+        <a href="https://instagram.com/dentalproarg"
+           target="_blank"
+           class="contact-card group flex flex-col items-center justify-center gap-5 text-white rounded-3xl p-10 shadow-xl hover:shadow-2xl hover:shadow-pink-400/30 btn-ig">
+          <div class="w-20 h-20 rounded-2xl bg-white/15 flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-transform shadow-inner">
+            <i class="fa-brands fa-instagram text-5xl text-white"></i>
+          </div>
+          <div>
+            <div class="text-xl font-bold mb-1">Instagram</div>
+            <div class="text-white/80 text-sm">@dentalproarg</div>
+            <div class="mt-4 inline-flex items-center gap-2 bg-white text-pink-600 font-bold text-sm px-5 py-2.5 rounded-full hover:bg-white/90 transition-colors">
+              <i class="fa-brands fa-instagram text-xs"></i> Casos reales
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <!-- NUEVO DESPLEGABLE DE HORARIOS Fran -->
+      <div class="mt-10 reveal w-full max-w-2xl mx-auto bg-fog rounded-2xl p-4 text-ocean/70 text-sm shadow-sm">
+        <details class="group outline-none">
+          
+          <!-- Esta es la barra visible que se puede cliquear -->
+          <summary class="flex flex-col sm:flex-row items-center justify-center gap-3 cursor-pointer list-none select-none font-medium hover:text-ocean transition-colors">
+            
+            <!-- Link de Ubicación (Cuando tengas el link real de Maps cambias el href) -->
+            <a href="https://maps.google.com" target="_blank" class="inline-flex items-center gap-2 hover:text-teal transition-colors group-hover:scale-102">
+              <i class="fa-solid fa-location-dot text-teal text-lg"></i>
+              <span class="underline underline-offset-4 decoration-teal/40">Villa Carlos Paz, Córdoba, Argentina</span>
+            </a>
+
+            <span class="hidden sm:inline text-fog-deep">|</span>
+
+            <!-- Indicador de Horario interactivo -->
+            <div class="inline-flex items-center gap-2">
+              <i class="fa-solid fa-clock text-teal text-lg"></i>
+              <span>Horarios</span>
+              <!-- Flechita animada que rota cuando se abre el desplegable -->
+              <i class="fa-solid fa-chevron-down text-xs text-teal transition-transform duration-300 group-open:rotate-180 ml-1"></i>
+            </div>
+
+          </summary>
+
+          <!-- Este es el contenido oculto que se despliega hacia abajo -->
+          <div class="mt-4 pt-4 border-t border-fog-deep/50 max-w-sm mx-auto text-left text-xs sm:text-sm">
+            <div class="grid grid-cols-2 gap-y-2 text-ocean/80">
+              <div class="font-semibold">Lunes a Viernes:</div>
+              <div class="text-right">09:00 a 13:00 / 16:00 a 20:00</div>
+              
+              <div class="font-semibold">Sábados:</div>
+              <div class="text-right">09:00 a 13:00</div>
+              
+              <div class="font-semibold text-red-500">Domingos y Feriados:</div>
+              <div class="text-right text-red-500 font-medium">Cerrado</div>
+            </div>
+            
+            <p class="mt-3 text-center text-xs text-ocean/50 italic">
+              * Los horarios pueden variar. Recomendamos coordinar turno previo.
+            </p>
+          </div>
+
+        </details>
+      </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════════ -->
+  <footer class="bg-ocean-dark text-white">
+
+    <!-- Wave top -->
+    <div class="relative overflow-hidden">
+      <svg viewBox="0 0 1200 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" class="w-full block" style="height:50px;">
+        <path d="M0,0 C300,60 900,60 1200,0 L1200,0 L0,0 Z" fill="white"/>
+        <path d="M0,0 C300,60 900,60 1200,0 L1200,60 L0,60 Z" fill="#091f33"/>
+      </svg>
+    </div>
+
+    <div class="max-w-6xl mx-auto px-5 py-10">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+
+        <!-- Logo -->
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-full bg-teal flex items-center justify-center">
+            <i class="fa-solid fa-tooth text-white text-xs"></i>
+          </div>
+          <span class="font-bold text-lg">Dental <span class="text-teal">Pro</span></span>
+        </div>
+
+        <!-- Social Links -->
+        <div class="flex items-center gap-4">
+          <a href="https://wa.me/5493541317717" target="_blank"
+             class="w-10 h-10 rounded-full bg-white/10 hover:bg-[#25d366] flex items-center justify-center transition-colors" aria-label="WhatsApp">
+            <i class="fa-brands fa-whatsapp"></i>
+          </a>
+          <a href="https://instagram.com/dentalproarg" target="_blank"
+             class="w-10 h-10 rounded-full bg-white/10 hover:bg-gradient-to-br hover:from-yellow-400 hover:to-pink-600 flex items-center justify-center transition-colors" aria-label="Instagram">
+            <i class="fa-brands fa-instagram"></i>
+          </a>
+          <a href="https://facebook.com/dentalproarg" target="_blank"
+             class="w-10 h-10 rounded-full bg-white/10 hover:bg-[#1877f2] flex items-center justify-center transition-colors" aria-label="Facebook">
+            <i class="fa-brands fa-facebook-f"></i>
+          </a>
+        </div>
+
+        <!-- Copyright -->
+        <p class="text-white/40 text-xs text-center md:text-right">
+          © 2026 Dental Pro · Villa Carlos Paz, Córdoba<br/>
+          Todos los derechos reservados.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ═══════════════════════════════════════════
+       FLOATING WA BUTTON
+  ═══════════════════════════════════════════ -->
+  <a href="https://wa.me/5493541317717?text=¡Hola!%20Vengo%20de%20la%20página%20web%20y%20quiero%20hacer%20una%20consulta"
+     target="_blank"
+     class="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-[#25d366] hover:bg-[#1ebe5a] text-white flex items-center justify-center shadow-2xl hover:scale-110 transition-all"
+     aria-label="Contactar por WhatsApp"
+     title="Contactanos por WhatsApp">
+    <i class="fa-brands fa-whatsapp text-2xl"></i>
+    <span class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center text-[8px] font-bold">1</span>
+  </a>
+
+
+  <!-- ═══════════════════════════════════════════
+       JAVASCRIPT
+  ═══════════════════════════════════════════ -->
+  <script>
+
+
+
+// agregado de Francisco
+    window.addEventListener('scroll', () => {
+  const navbar = document.getElementById('navbar');
+  const logoText = document.getElementById('logo-text'); // <--- Añade esta línea si no está
+
+  if (window.scrollY > 50) {
+    // CUANDO BAJAS: La barra se hace blanca
+    navbar.classList.add('bg-white', 'shadow-md');
+    navbar.classList.remove('bg-transparent');
+    
+    // CAMBIO PARA EL TEXTO: Se quita el blanco y se pone el color oscuro
+    logoText.classList.add('text-ocean-dark');
+    logoText.classList.remove('text-white');
+
+  } else {
+    // CUANDO ESTÁS ARRIBA: La barra vuelve a ser transparente
+    navbar.classList.add('bg-transparent');
+    navbar.classList.remove('bg-white', 'shadow-md');
+    
+    // CAMBIO PARA EL TEXTO: Vuelve a ser blanco para que contraste con el fondo
+    logoText.classList.add('text-white');
+    logoText.classList.remove('text-ocean-dark');
+  }
+});
+
+
+
+
+// ── Navbar scroll effect ──
+    const navbar = document.getElementById('navbar');
+    const navLinks = navbar.querySelectorAll('.nav-link');
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 60) {
+        navbar.classList.add('scrolled');
+        navLinks.forEach(l => {
+          l.classList.remove('text-white');
+          l.classList.add('text-ocean');
+        });
+        document.getElementById('logo-text').classList.remove('text-ocean-dark');
+        document.getElementById('logo-text').classList.add('text-ocean');
+      } else {
+        navbar.classList.remove('scrolled');
+        navLinks.forEach(l => {
+          l.classList.add('text-white');
+          l.classList.remove('text-ocean');
+        });
+      }
+    });
+
+    // ── Mobile Menu ──
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const hamIcon = document.getElementById('ham-icon');
+
+    hamburger.addEventListener('click', () => {
+      mobileMenu.classList.toggle('open');
+      hamIcon.className = mobileMenu.classList.contains('open')
+        ? 'fa-solid fa-xmark text-xl'
+        : 'fa-solid fa-bars text-xl';
+    });
+
+    document.querySelectorAll('.mobile-link').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.remove('open');
+        hamIcon.className = 'fa-solid fa-bars text-xl';
+      });
+    });
+
+    // ── Scroll Reveal (IntersectionObserver) ──
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          // Stagger siblings in the same grid
+          const siblings = entry.target.closest('.grid')
+            ? Array.from(entry.target.closest('.grid').querySelectorAll('.reveal'))
+            : [entry.target];
+          const idx = siblings.indexOf(entry.target);
+          setTimeout(() => {
+            entry.target.classList.add('visible');
+          }, idx * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    revealEls.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
